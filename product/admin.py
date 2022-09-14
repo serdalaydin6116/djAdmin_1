@@ -5,6 +5,15 @@ from django.utils import timezone
 
 
 
+class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm aynı iş
+    '''Tabular Inline View for '''
+    model = Review
+    extra = 1
+    classes = ('collapse',)
+    # min_num = 3
+    # max_num = 20
+
+
 class ProductAdmin(admin.ModelAdmin):
     # readonly_fields=("create_date",)
     list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago")  
@@ -13,6 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ("name", "create_date")
     prepopulated_fields = {'slug' : ('name',)}
     list_per_page = 10
+    inlines = (ReviewInline,)
     ordering = ("name",)
     date_hierarchy = "update_date"
     # fields = (('name', 'slug'), 'description', "is_in_stock")
@@ -47,6 +57,9 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'created_date', 'is_released')
     list_per_page = 50
     raw_id_fields = ('product',) 
+
+
+
 
 
 
