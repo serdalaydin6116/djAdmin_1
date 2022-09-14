@@ -1,12 +1,13 @@
 from django.contrib import admin
 from .models import Product
+from django.utils import timezone
 
 
 
 
 class ProductAdmin(admin.ModelAdmin):
     # readonly_fields=("create_date",)
-    list_display = ("name", "create_date", "is_in_stock", "update_date")
+    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago")  
     list_editable = ( "is_in_stock", )
     list_display_links = ("create_date", )
     search_fields = ("name", "create_date")
@@ -35,6 +36,11 @@ class ProductAdmin(admin.ModelAdmin):
         count = queryset.update(is_in_stock=True)
         self.message_user(request, f"{count} çeşit ürün stoğa eklendi")
     is_in_stock.short_description = 'İşaretlenen ürünleri stoğunu güncelle'
+    
+
+    def added_days_ago(self, product):
+        fark = timezone.now() - product.create_date
+        return fark.days
 
 
 
