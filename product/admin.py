@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Review
+from .models import Product, Review, Category
 from django.utils import timezone
 
 
@@ -16,7 +16,7 @@ class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm
 
 class ProductAdmin(admin.ModelAdmin):
     # readonly_fields=("create_date",)
-    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago")  
+    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago", "how_many_reviews")  
     list_editable = ( "is_in_stock", )
     list_display_links = ("create_date", )
     search_fields = ("name", "create_date")
@@ -35,10 +35,13 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('Optionals Settings', {
             "classes" : ("collapse", ),
-            "fields" : ("description",),
+            "fields" : ("description","categories"),
             'description' : "You can use this section for optionals settings"
         })
     )
+    # filter_horizontal = ("categories", )
+    fitler_vertical = ("categories", )
+
 
     actions = ("is_in_stock", "işaretlenen_ürünleri stoğa_ekle",)    
 
@@ -69,6 +72,7 @@ class ReviewAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(Category)
 
 
 admin.site.site_title = "Clarusway Title"
