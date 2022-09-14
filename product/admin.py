@@ -29,6 +29,13 @@ class ProductAdmin(admin.ModelAdmin):
         })
     )
 
+    actions = ("is_in_stock", "işaretlenen_ürünleri stoğa_ekle",)    
+
+    def is_in_stock(self, request, queryset):
+        count = queryset.update(is_in_stock=True)
+        self.message_user(request, f"{count} çeşit ürün stoğa eklendi")
+    is_in_stock.short_description = 'İşaretlenen ürünleri stoğunu güncelle'
+
 
 
 
