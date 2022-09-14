@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Review
 from django.utils import timezone
 
 
@@ -24,7 +24,7 @@ class ProductAdmin(admin.ModelAdmin):
             # 'classes': ('wide', 'extrapretty'), wide or collapse
         }),
         ('Optionals Settings', {
-            # "classes" : ("collapse", ),
+            "classes" : ("collapse", ),
             "fields" : ("description",),
             'description' : "You can use this section for optionals settings"
         })
@@ -36,11 +36,17 @@ class ProductAdmin(admin.ModelAdmin):
         count = queryset.update(is_in_stock=True)
         self.message_user(request, f"{count} çeşit ürün stoğa eklendi")
     is_in_stock.short_description = 'İşaretlenen ürünleri stoğunu güncelle'
-    
+
 
     def added_days_ago(self, product):
         fark = timezone.now() - product.create_date
         return fark.days
+
+    
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'created_date', 'is_released')
+    list_per_page = 50
+    raw_id_fields = ('product',) 
 
 
 
@@ -49,6 +55,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Review, ReviewAdmin)
 
 
 admin.site.site_title = "Clarusway Title"
