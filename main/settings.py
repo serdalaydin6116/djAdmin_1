@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'product', 
     'ckeditor',
+    'django_admin_listfilter_dropdown',
 ]
 
 MIDDLEWARE = [
