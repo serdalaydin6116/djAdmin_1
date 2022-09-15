@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'product', 
     'ckeditor',
     'django_admin_listfilter_dropdown',
+    'rangefilter',
+    'import_export',
 ]
 
 MIDDLEWARE = [
