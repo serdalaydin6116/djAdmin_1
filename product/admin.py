@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Product, Review, Category
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 
 
@@ -15,8 +16,8 @@ class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm
 
 
 class ProductAdmin(admin.ModelAdmin):
-    # readonly_fields=("create_date",)
-    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago", "how_many_reviews")  
+    readonly_fields = ("bring_image",)
+    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago", "how_many_reviews", "bring_img_to_list")  
     list_editable = ( "is_in_stock", )
     list_display_links = ("create_date", )
     search_fields = ("name", "create_date")
@@ -27,7 +28,7 @@ class ProductAdmin(admin.ModelAdmin):
     date_hierarchy = "update_date"
     # fields = (('name', 'slug'), 'description', "is_in_stock")
     fieldsets = (
-        ("General fields", {
+        (None, {
             "fields": (
                 ('name', 'slug'), "is_in_stock" # to display multiple fields on the same line, wrap those fields in their own tuple
             ),
@@ -35,7 +36,8 @@ class ProductAdmin(admin.ModelAdmin):
         }),
         ('Optionals Settings', {
             "classes" : ("collapse", ),
-            "fields" : ("description","categories"),
+            "fields" : ("description","categories", "product_img", "bring_image"),
+            
             'description' : "You can use this section for optionals settings"
         })
     )
@@ -54,6 +56,14 @@ class ProductAdmin(admin.ModelAdmin):
     def added_days_ago(self, product):
         fark = timezone.now() - product.create_date
         return fark.days
+
+
+    def bring_img_to_list(self, obj):
+        if self.product_img:
+            return mark_safe(f"<img src={self.product_img.url} width=50 height=50></img>")
+        return mark_safe("******")
+    
+    bring_img_to_list.short_description = "product_image"
 
     
 class ReviewAdmin(admin.ModelAdmin):
