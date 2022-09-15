@@ -1,5 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.utils.safestring import mark_safe
 
 
 
@@ -21,6 +22,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     # description = models.TextField(blank=True, null=True)
     description = RichTextField()
+    product_img = models.ImageField(null=True, blank=True, default="defaults/clarusway.png", upload_to="product/")
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     is_in_stock = models.BooleanField(default=True)
@@ -38,6 +40,12 @@ class Product(models.Model):
     def how_many_reviews(self):
         count = self.reviews.count()
         return count
+
+
+    def bring_image(self):
+        if self.product_img:
+            return mark_safe(f"<img src={self.product_img.url} width=400 height=400></img>")
+        return mark_safe(f"<h3>{self.name} has not image </h3>")
 
 
 class Review(models.Model):
