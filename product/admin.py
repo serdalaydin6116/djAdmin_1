@@ -6,7 +6,7 @@ from django.utils import timezone
 from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter, DropdownFilter
 from rangefilter.filters import DateRangeFilter, DateTimeRangeFilter
 from import_export.admin import ImportExportModelAdmin
-from products.resources import ReviewResource
+from product.resources import ReviewResource
 
 class ReviewInline(admin.TabularInline):  # StackedInline farklı bir görünüm aynı iş
     '''Tabular Inline View for '''
